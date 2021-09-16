@@ -1,13 +1,16 @@
+
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from FlaskServer import db, bcrypt
-from FlaskServer.models import User, Post
+from FlaskServer.models import User
 from FlaskServer.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
                                    RequestResetForm, ResetPasswordForm)
 from FlaskServer.users.utils import save_picture, send_reset_email
 users = Blueprint('users', __name__)
-
-
+import matplotlib
+import matplotlib.pyplot as plt 
+import pandas as pd
+import os
 @users.route("/register", methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -21,7 +24,6 @@ def register():
         flash('Account Created! Now You Can Login!', 'success')
         return redirect(url_for('users.login'))
     return render_template('register.html', title='Register', form=form)
-
 
 @users.route("/login",  methods=['GET', 'POST'])
 def login():
@@ -38,12 +40,10 @@ def login():
             flash('Error, Login failed: Check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
-
 @users.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for('main.home'))
-
 
 @users.route("/account", methods=['GET', 'POST'])
 @login_required
@@ -64,17 +64,6 @@ def account():
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form)
 
-
-@users.route("/user/<string:username>")
-def user_posts(username):
-    page = request.args.get('page', 1, type=int)
-    user = User.query.filter_by(username=username).first_or_404()
-    posts = Post.query.filter_by(author=user)\
-        .order_by(Post.date_posted.desc())\
-        .paginate(page=page, per_page=5)
-    return render_template('user_posts.html', posts=posts, user=user)
-
-
 @users.route("/reset_password",  methods=['GET', 'POST'])
 def reset_request():
     if current_user.is_authenticated:
@@ -86,7 +75,6 @@ def reset_request():
         flash('An email has been sent with instructions to reset your password.', 'info')
         return redirect(url_for('users.login'))
     return render_template('reset_request.html', title='Reset Password', form=form)
-
 
 @users.route("/reset_password/<token>",  methods=['GET', 'POST'])
 def reset_token(token):
@@ -104,3 +92,25 @@ def reset_token(token):
         flash('Your password has been changed', 'success')
         return redirect(url_for('users.login'))
     return render_template('reset_token.html', title='Reset Password', form=form)
+
+@users.route("/search",  methods=['GET', 'POST'])
+def search():
+    return render_template('Search.html', title='Search')
+
+import tablib
+from RealEstate import RunEverything, GetSlope, GetIntercept, GetScore
+@users.route("/Search_Code",  methods=['GET', 'POST'])
+def my_form_post():
+    if request.method == "POST":
+        Zip_Code = request.form.get("ZipCode")
+        fileName = "C:\\Users\\Keith\\VSCODE\\TesterProject\\FlaskProject\\" + str(Zip_Code) + '.csv'
+        RunEverything(Zip_Code)
+        slope = GetSlope()
+        intercept = GetIntercept()
+        Formula = str(slope) + "* SQFT + " + str(intercept)
+        Score = GetScore()
+        a = pd.read_csv(fileName)
+        data = list(a.values)
+
+        return render_template('SearchZipCode.html', title='SearchCode', Zip_Code= Zip_Code, Formula = Formula, TableSet = data, Score = Score)
+    return render_template('home.html')
