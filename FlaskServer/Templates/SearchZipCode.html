@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+    {% block content %}
+        <h1>Search Code Page For {{Zip_Code}}</h1>
+        <img src="{{url_for('static', filename='chart.png')}}"/>
+        <h6>Score for the Machine Learning: {{Score}}</h6>
+        <h3>Formula for Price: {{Formula}}</h3>
+        <h3>Here is a table with the houses on sale in {{Zip_Code}}:</h3>
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>Address</th>
+                    <th>SQFT</th>
+                    <th>Price</th>
+                    <th>Bath_Count</th>
+                    <th>Bed_Count</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for value in TableSet %}
+                <tr>
+                    <td>{{ value[0] }}</td>
+                    <td>{{ value[1] }}</td>
+                    <td>{{ value[2] }}</td>
+                    <td>{{ value[3] }}</td>
+                    <td>{{ value[4] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <button><a href="{{ url_for('users.search') }}">Search Another Zip Code!</a></button>
+    {% endblock content %}

@@ -1,28 +1,32 @@
 {% extends "layout.html" %}
-
 {% block content %}
-    {% for post in posts.items %}
-    <article class="media content-section">
-      <img class="rounded-circle article-image" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
-        <div class="media-body">
-          <div class="article-metadata">
-            <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username)}}">{{ post.author.username }}</a>
-            <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-          </div>
-          <h2><a class="article-title" href="{{ url_for('posts.post', post_id = post.id)}}">{{ post.title }}</a></h2>
-          <p class="article-content">{{ post.content }}</p>
-        </div>
-      </article>
-    {% endfor %}
-    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2, ) %}
-      {% if page_num %}
-        {% if posts.page == page_num %}
-          <a class="btn btn-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
-      {% else %}
-        <a class="btn btn-outline-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
-      {% endif %}
-        {% else %}
-      {% endif %}
-    {% endfor %}
+<style>
+    .para{
+        width:1600px;
+        height:1000px;
+        padding-left: 0px;
+        margin-left: 0px;
+        border-radius:5px;
+    }
+    .text-font{
+        font-family: "Times New Roman", Times, serif;
+    }
+    .removeMargin{
+        padding-left: 0px !IMPORTANT;
+        margin-left: 0px  !IMPORTANT;
 
+    }
+</style>
+<body class="removeMargin">
+    <div class="para">
+        <h1 class="text-font">Welcome to K.R.E.P!</h1>
+            <strong>
+                <p>This is Keith's Real Estate Predictor project built on Flask.</p>
+                <p>The purpose of this project is the be able to find a line of best fit and predict house prices based on a certain SQFT using machine learning <br>
+                and web scraping. 
+                </p>
+                <p>To use it, go to the 'Search' page and enter a zip code.</p>
+            </strong>
+    </div>
+</body>
 {% endblock content %}
