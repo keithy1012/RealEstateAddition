@@ -103,7 +103,7 @@ from RealEstate import RunEverything, GetSlope, GetIntercept, GetScore
 def my_form_post():
     if request.method == "POST":
         Zip_Code = request.form.get("ZipCode")
-        fileName = "C:\\Users\\Keith\\VSCODE\\TesterProject\\FlaskProject\\" + str(Zip_Code) + '.csv'
+        fileName = str(Zip_Code) + '.csv'
         RunEverything(Zip_Code)
         slope = GetSlope()
         intercept = GetIntercept()
