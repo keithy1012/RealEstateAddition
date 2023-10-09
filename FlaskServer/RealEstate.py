@@ -168,7 +168,7 @@ def PlotPoints(data):
     global Score
     Score = "{:.4f}".format(clf.score(X_test, y_test))
     y_pred = regr.predict(X_test)
-    plt.savefig(r'C:\Users\Keith\VSCODE\TesterProject\FlaskProject\FlaskServer\static\chart.png')
+    plt.savefig(r'\static\chart.png')
     plt.close()
  
 def GetSlope():
